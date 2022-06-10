@@ -12,5 +12,3 @@ class Fg:
 
         if self.pos[0] < -288:
             self.pos[0] = 288  + self.speed
-
-        return self.pos

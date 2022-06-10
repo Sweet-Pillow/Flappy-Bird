@@ -7,7 +7,7 @@ class Bg:
         self.day = './assets/background-day.png'
         self.night = './assets/background-night.png'
         self.background = ''
-        self.speed = 3
+        self.speed = 1
         self.pos = pos
         self.get_time()
     
@@ -25,4 +25,3 @@ class Bg:
         if self.pos[0] < -288:
             self.pos[0] = 288  + self.speed
 
-        return self.pos

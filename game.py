@@ -31,19 +31,32 @@ class Game:
 
         while True:
             self.clock.tick(60)
-
+            
+            #   Getting Events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                    
-            self.screen.blit(self.bg1.background, self.bg1.move())
-            self.screen.blit(self.bg2.background, self.bg2.move())
+            
+            #   Drawing on screen
+            self.screen.blit(self.bg1.background, self.bg1.pos)
+            self.screen.blit(self.bg2.background, self.bg2.pos)
 
-            self.screen.blit(self.fg1.foreground, self.fg1.move())
-            self.screen.blit(self.fg2.foreground, self.fg2.move())
+            self.screen.blit(self.fg1.foreground, self.fg1.pos)
+            self.screen.blit(self.fg2.foreground, self.fg2.pos)
 
             self.screen.blit(self.bird.bird, self.bird.pos)
+
+
+            #   Updating
+            self.bg1.move()
+            self.bg2.move()
+
+            self.fg1.move()
+            self.fg2.move()
+
+            self.bird.gravity_force()
+            self.bird.bird_control()
 
             pygame.display.update()
 
