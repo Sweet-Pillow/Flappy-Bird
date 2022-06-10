@@ -2,6 +2,7 @@ import pygame
 import sys
 from bg import Bg
 from fg import Fg
+from bird import Bird
 
 
 class Game:
@@ -13,6 +14,8 @@ class Game:
 
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption('Flappy Bird')
+        self.icon = pygame.image.load('./assets/yellowbird-downflap.png')
+        pygame.display.set_icon(pygame.transform.scale(self.icon, (32, 32)))
         self.clock = pygame.time.Clock()
 
         self.bg1 = Bg([0, 0])
@@ -20,6 +23,8 @@ class Game:
 
         self.fg1 = Fg([0, 400])
         self.fg2 = Fg([self.width, 400])
+
+        self.bird = Bird([self.width//6, self.height//4])
 
 
     def loop(self):
@@ -37,6 +42,8 @@ class Game:
 
             self.screen.blit(self.fg1.foreground, self.fg1.move())
             self.screen.blit(self.fg2.foreground, self.fg2.move())
+
+            self.screen.blit(self.bird.bird, self.bird.pos)
 
             pygame.display.update()
 
