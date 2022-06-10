@@ -14,7 +14,9 @@ class Game:
         pygame.display.set_caption('Flappy Bird')
         self.clock = pygame.time.Clock()
 
-        self.bg = Bg().background
+        self.bg1 = Bg([0, 0])
+        self.bg2 = Bg([self.width, 0])
+
 
     def loop(self):
 
@@ -26,7 +28,9 @@ class Game:
                     pygame.quit()
                     sys.exit()
                     
-            self.screen.blit(self.bg, (0, 0))
+            self.screen.blit(self.bg1.background, self.bg1.move())
+            self.screen.blit(self.bg2.background, self.bg2.move())
+
             pygame.display.update()
 
 
