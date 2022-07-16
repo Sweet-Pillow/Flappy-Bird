@@ -3,6 +3,7 @@ import sys
 from bg import Bg
 from fg import Fg
 from bird import Bird
+from pipes import Pipes
 
 
 class Game:
@@ -21,6 +22,8 @@ class Game:
         self.bg1 = Bg([0, 0])
         self.bg2 = Bg([self.width, 0])
 
+        self.pipes = Pipes([self.width//2, -100])
+        
         self.fg1 = Fg([0, 400])
         self.fg2 = Fg([self.width, 400])
 
@@ -42,6 +45,8 @@ class Game:
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
 
+            self.screen.blit(self.pipes.pipes, self.pipes.pos)
+
             self.screen.blit(self.fg1.foreground, self.fg1.pos)
             self.screen.blit(self.fg2.foreground, self.fg2.pos)
 
@@ -57,6 +62,8 @@ class Game:
 
             self.bird.gravity_force()
             self.bird.bird_control()
+            
+            self.bird.bird_animation()
 
             pygame.display.update()
 
