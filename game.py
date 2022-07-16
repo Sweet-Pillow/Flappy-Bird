@@ -22,8 +22,10 @@ class Game:
         self.bg1 = Bg([0, 0])
         self.bg2 = Bg([self.width, 0])
 
-        self.pipes = Pipes([self.width//2, -100])
-        
+        self.pipe1 = Pipes(self.width, 0)
+        self.pipe2 = Pipes(self.width, 1)
+        self.pipe3 = Pipes(self.width, 2)
+
         self.fg1 = Fg([0, 400])
         self.fg2 = Fg([self.width, 400])
 
@@ -45,7 +47,9 @@ class Game:
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
 
-            self.screen.blit(self.pipes.pipes, self.pipes.pos)
+            self.screen.blit(self.pipe1.pipes, self.pipe1.pos)
+            self.screen.blit(self.pipe2.pipes, self.pipe2.pos)
+            self.screen.blit(self.pipe3.pipes, self.pipe3.pos)
 
             self.screen.blit(self.fg1.foreground, self.fg1.pos)
             self.screen.blit(self.fg2.foreground, self.fg2.pos)
@@ -56,6 +60,14 @@ class Game:
             #   Updating
             self.bg1.move()
             self.bg2.move()
+
+            self.pipe1.move()
+            self.pipe2.move()
+            self.pipe3.move()
+            
+            self.pipe1.respawn_pipe()
+            self.pipe2.respawn_pipe()
+            self.pipe3.respawn_pipe()
 
             self.fg1.move()
             self.fg2.move()
