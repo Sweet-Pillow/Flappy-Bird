@@ -1,14 +1,17 @@
 import pygame as pg
 
 
-class Fg:
+class Fg(pg.sprite.Sprite):
     def __init__(self, pos):
-        self.foreground = pg.image.load('./assets/base.png')
+        pg.sprite.Sprite.__init__(self)
+        self.image = pg.image.load('./assets/base.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
         self.speed = 2
-        self.pos = pos
 
     def move(self):
-        self.pos[0] -= self.speed
+        self.rect.x -= self.speed
 
-        if self.pos[0] < -288:
-            self.pos[0] = 288  + self.speed
+        if self.rect.x < -288:
+            self.rect.x = 288 + self.speed
