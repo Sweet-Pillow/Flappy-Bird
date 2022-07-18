@@ -61,7 +61,7 @@ class Bird(pg.sprite.Sprite):
 
     def bird_animation(self):
         now = pg.time.get_ticks()
-        #print(f'Bird update = {self.bird_fly_update}, now = {now}')
+
         if now - self.bird_fly_update > 60:
             self.bird_fly_update = now
             self.bird = pg.image.load(

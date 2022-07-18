@@ -4,6 +4,7 @@ from bg import Bg
 from fg import Fg
 from bird import Bird
 from pipes import Pipes
+from gamestart import GameStart
 
 
 class Game:
@@ -20,6 +21,8 @@ class Game:
         self.clock = pygame.time.Clock()
 
         # Instantiating objects
+        self.game_start = GameStart(self.width, self.height)
+
         self.bg1 = Bg([0, 0])
         self.bg2 = Bg([self.width, 0])
 
@@ -39,10 +42,37 @@ class Game:
         self.obstacles_sprites.add(self.fg2)
 
     def start(self):
-        pass
+        while True:
+            self.clock.tick(60)
+
+            #   Getting Events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            
+            self.screen.blit(self.bg1.background, self.bg1.pos)
+            self.screen.blit(self.bg2.background, self.bg2.pos)
+
+            self.screen.blit(self.fg1.image, self.fg1.rect)
+            self.screen.blit(self.fg2.image, self.fg2.rect)
+
+            self.screen.blit(self.game_start.image, self.game_start.rect)
+
+            #   Updating
+            self.bg1.move()
+            self.bg2.move()
+
+            self.fg1.move()
+            self.fg2.move()
+
+            #   Animation
+            self.game_start.animation()
+
+            pygame.display.update()
 
     def game_over(self):
-        pass
+        print('Perdeu')
 
     def loop(self):
 
@@ -58,13 +88,6 @@ class Game:
             #   Drawing on screen
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
-
-            '''self.screen.blit(self.pipe1.pipes, self.pipe1.rect)
-            self.screen.blit(self.pipe2.pipes, self.pipe2.rect)
-            self.screen.blit(self.pipe3.pipes, self.pipe3.rect)
-
-            self.screen.blit(self.fg1.foreground, self.fg1.rect)
-            self.screen.blit(self.fg2.foreground, self.fg2.rect)'''
 
             self.obstacles_sprites.draw(self.screen)
 
@@ -90,12 +113,11 @@ class Game:
 
             #   Colission check
             if pygame.sprite.spritecollide(self.bird, self.obstacles_sprites, False):
-                print('colidiu no chão')
-                print(pygame.sprite.spritecollide(self.bird, self.obstacles_sprites, False))
+                self.game_over()
 
             pygame.display.update()
 
 
 if __name__ == '__main__':
     root = Game()
-    root.loop()
+    root.start()
