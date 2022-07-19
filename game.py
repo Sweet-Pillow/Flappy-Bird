@@ -5,6 +5,7 @@ from fg import Fg
 from bird import Bird
 from pipes import Pipes
 from gamestart import GameStart
+from gameover import GameOver
 
 
 class Game:
@@ -22,6 +23,7 @@ class Game:
 
         # Instantiating objects
         self.game_start = GameStart(self.width, self.height)
+        self.game_over = GameOver(self.width, self.height)
 
         self.bg1 = Bg([0, 0])
         self.bg2 = Bg([self.width, 0])
@@ -42,7 +44,8 @@ class Game:
         self.obstacles_sprites.add(self.fg2)
 
     def start(self):
-        while True:
+        run = True
+        while run:
             self.clock.tick(60)
 
             #   Getting Events
@@ -69,14 +72,47 @@ class Game:
             #   Animation
             self.game_start.animation()
 
+            #   Control
+            run = self.game_start.pressed_start()
+
+            pygame.display.update()
+        
+        self.loop()
+
+    def over(self):
+        run = True
+
+        while run:
+            self.clock.tick(60)
+
+            #   Getting Events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            self.screen.blit(self.bg1.background, self.bg1.pos)
+            self.screen.blit(self.bg2.background, self.bg2.pos)
+
+            self.obstacles_sprites.draw(self.screen)
+
+            self.screen.blit(self.bird.bird, self.bird.rect)
+
+            self.screen.blit(self.game_over.image, self.game_over.rect)
+            
+            #   Animation
+            self.game_over.animation()
+
+            if not (pygame.sprite.collide_rect(self.bird, self.fg1) or pygame.sprite.collide_rect(self.bird, self.fg2)):
+                self.bird.gravity_force()
+
             pygame.display.update()
 
-    def game_over(self):
-        print('Perdeu')
+        self.start()
 
     def loop(self):
-
-        while True:
+        run = True
+        while run:
             self.clock.tick(60)
 
             #   Getting Events
@@ -113,10 +149,11 @@ class Game:
 
             #   Colission check
             if pygame.sprite.spritecollide(self.bird, self.obstacles_sprites, False):
-                self.game_over()
+                run = False
 
             pygame.display.update()
 
+        self.over()
 
 if __name__ == '__main__':
     root = Game()

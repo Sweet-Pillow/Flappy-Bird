@@ -33,3 +33,8 @@ class GameStart:
             
             elif self.scale <= 0.9:
                 self.size = 1
+    
+    def pressed_start(self):
+        if pg.key.get_pressed()[pg.K_SPACE]:
+            return False
+        return True
