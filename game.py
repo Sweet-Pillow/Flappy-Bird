@@ -48,7 +48,7 @@ class Game:
 
     def start(self):
         run = True
-        
+
         while run:
             self.clock.tick(60)
 
@@ -57,7 +57,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            
+
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
 
@@ -79,7 +79,7 @@ class Game:
             run = self.game_start.pressed_start()
 
             pygame.display.update()
-        
+
         self.loop()
 
     def over(self):
@@ -102,15 +102,12 @@ class Game:
             self.screen.blit(self.bird.bird, self.bird.rect)
 
             self.screen.blit(self.game_over.image, self.game_over.rect)
-            
+
             #   Animation
             self.game_over.animation()
-
-            #if not (pygame.sprite.collide_rect(self.bird, self.fg1) or pygame.sprite.collide_rect(self.bird, self.fg2)):
             if not (pygame.sprite.spritecollide(self.bird, self.all_fgs_group, False)):
-                print(self.bird.rect)
                 self.bird.gravity_force(True)
-            
+
             else:
                 run = self.game_over.pressed_restart()
 
@@ -120,7 +117,7 @@ class Game:
         self.pipe2.restart_pipe()
 
         self.bird.respawn()
-        
+
         self.loop()
 
     def loop(self):
@@ -164,6 +161,7 @@ class Game:
             pygame.display.update()
 
         self.over()
+
 
 if __name__ == '__main__':
     root = Game()

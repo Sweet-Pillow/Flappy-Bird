@@ -49,11 +49,10 @@ class Pipes:
     def respawn(self):
         if self.pipe_top.rect.x <= -52:
             # 52 is the width of the pipe image, the pipe will respawn only when the pipe is fully outside the screen
-            self.posX = self.distanceX_between_pipes * 2 - 52
             self.posY = random.randint(30, 220)
-            self.pipe_top.rect.x = self.posX
+            self.pipe_top.rect.x = self.distanceX_between_pipes * 2 - 52
             self.pipe_top.rect.y = self.posY - 320
-            self.pipe_bottom.rect.x = self.posX
+            self.pipe_bottom.rect.x = self.distanceX_between_pipes * 2 - 52
             self.pipe_bottom.rect.y = self.posY + self.distanceY_between_pipes
 
     def restart_pipe(self):
