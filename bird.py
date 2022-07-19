@@ -6,6 +6,14 @@ class Bird(pg.sprite.Sprite):
     def __init__(self, pos):
         pg.sprite.Sprite.__init__(self)
 
+        self.pos = pos
+        self.jump_height = 12
+        self.gravity = 1
+        self.rotation = 0
+        self.bird_fly_update = 0  # Variable to control the fly animation speed
+        self.bird_rotate_update = 0  # Variable to control the rotation animataion speed
+        self.jumping = False    # Variable to turn off the gravity_force function while the bird is jumping
+        
         self.birds_images = {"yellow": ['./assets/yellowbird-downflap.png',
                                         './assets/yellowbird-midflap.png',
                                         './assets/yellowbird-upflap.png',
@@ -25,37 +33,28 @@ class Bird(pg.sprite.Sprite):
         self.bird_frame = 0
         self.bird = pg.image.load(self.birds_images[self.bird_colors][1])
         self.rect = self.bird.get_rect()
-        self.rect.x = pos[0]
-        self.rect.y = pos[1]
+        self.rect.x = self.pos[0]
+        self.rect.y = self.pos[1]
 
-        self.pos = pos
-        self.jump = 12
-        self.gravity = 1
-        self.rotation = 0
-        self.bird_fly_update = 0  # Variable to control the fly animation speed
-        self.bird_rotate_update = 0  # Variable to control the rotation animataion speed
-        
-        # Variable to turn off the gravity_force function while the bird is jumping
-        self.jumping = False
-        # Variable that makes the bird wait the jump finish to start other jump.
-        self.pressed = False
 
     def bird_control(self):
-        if pg.key.get_pressed()[pg.K_SPACE] or self.pressed:
+        if pg.key.get_pressed()[pg.K_SPACE] or self.jumping:
             self.jumping = True
-            self.pressed = True
             self.gravity = 1
 
-            if self.jump > 0:
-                self.rect.y -= self.jump
-                self.jump -= 1
+            if self.jump_height > 0:
+                self.rect.y -= self.jump_height
+                self.jump_height -= 1
             else:
-                self.jump = 12
-                self.pressed = False
+                self.jump_height = 12
                 self.jumping = False
 
-    def gravity_force(self):
-        if self.jumping == False:
+    def respawn(self):
+        self.rect.x = self.pos[0]
+        self.rect.y = self.pos[1]
+
+    def gravity_force(self, game_over=False):
+        if self.jumping == False or game_over:
             self.rect.y += self.gravity
             self.gravity += 0.2
 

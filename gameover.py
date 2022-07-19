@@ -22,7 +22,7 @@ class GameOver:
 
         if now - self.animation_update > 10:
             self.animation_update = now
-            self.image = pg.transform.smoothscale(
+            self.image = pg.transform.scale(
                 self.original_image, (self.image_width * self.scale, self.image_height * self.scale))
             self.rect = self.image.get_rect()
             self.rect.center = (self.width//2, self.height//2)
@@ -33,3 +33,8 @@ class GameOver:
             
             elif self.scale <= 0.9:
                 self.size = 1
+    
+    def pressed_restart(self):
+        if pg.key.get_pressed()[pg.K_SPACE]:
+            return False
+        return True

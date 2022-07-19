@@ -37,14 +37,18 @@ class Game:
         self.bird = Bird([self.width//6, self.height//4])
 
         # Defining the sprite group of the obstacles
-        self.obstacles_sprites = pygame.sprite.Group()
-        self.obstacles_sprites.add(self.pipe1.pipes)
-        self.obstacles_sprites.add(self.pipe2.pipes)
-        self.obstacles_sprites.add(self.fg1)
-        self.obstacles_sprites.add(self.fg2)
+        self.all_obstacles_group = pygame.sprite.Group()
+        self.all_pipes_group = pygame.sprite.Group()
+        self.all_fgs_group = pygame.sprite.Group()
+
+        self.all_pipes_group.add(self.pipe1.pipes, self.pipe2.pipes)
+        self.all_fgs_group.add(self.fg1, self.fg2)
+
+        self.all_obstacles_group.add(self.all_pipes_group, self.all_fgs_group)
 
     def start(self):
         run = True
+        
         while run:
             self.clock.tick(60)
 
@@ -57,8 +61,7 @@ class Game:
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
 
-            self.screen.blit(self.fg1.image, self.fg1.rect)
-            self.screen.blit(self.fg2.image, self.fg2.rect)
+            self.all_fgs_group.draw(self.screen)
 
             self.screen.blit(self.game_start.image, self.game_start.rect)
 
@@ -94,7 +97,7 @@ class Game:
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
 
-            self.obstacles_sprites.draw(self.screen)
+            self.all_obstacles_group.draw(self.screen)
 
             self.screen.blit(self.bird.bird, self.bird.rect)
 
@@ -103,12 +106,22 @@ class Game:
             #   Animation
             self.game_over.animation()
 
-            if not (pygame.sprite.collide_rect(self.bird, self.fg1) or pygame.sprite.collide_rect(self.bird, self.fg2)):
-                self.bird.gravity_force()
+            #if not (pygame.sprite.collide_rect(self.bird, self.fg1) or pygame.sprite.collide_rect(self.bird, self.fg2)):
+            if not (pygame.sprite.spritecollide(self.bird, self.all_fgs_group, False)):
+                print(self.bird.rect)
+                self.bird.gravity_force(True)
+            
+            else:
+                run = self.game_over.pressed_restart()
 
             pygame.display.update()
 
-        self.start()
+        self.pipe1.restart_pipe()
+        self.pipe2.restart_pipe()
+
+        self.bird.respawn()
+        
+        self.loop()
 
     def loop(self):
         run = True
@@ -125,7 +138,7 @@ class Game:
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
 
-            self.obstacles_sprites.draw(self.screen)
+            self.all_obstacles_group.draw(self.screen)
 
             self.screen.blit(self.bird.bird, self.bird.rect)
 
@@ -136,9 +149,6 @@ class Game:
             self.pipe1.move()
             self.pipe2.move()
 
-            self.pipe1.respawn_pipe()
-            self.pipe2.respawn_pipe()
-
             self.fg1.move()
             self.fg2.move()
 
@@ -148,7 +158,7 @@ class Game:
             self.bird.bird_animation()
 
             #   Colission check
-            if pygame.sprite.spritecollide(self.bird, self.obstacles_sprites, False):
+            if pygame.sprite.spritecollide(self.bird, self.all_obstacles_group, False):
                 run = False
 
             pygame.display.update()
