@@ -3,8 +3,8 @@ import pygame as pg
 
 class GameOver:
     def __init__(self, width, height):
-        self.image = pg.image.load('./assets/gameover.png')
-        self.original_image = pg.image.load('./assets/gameover.png')
+        self.image = pg.image.load('./assets/gameover.png').convert_alpha()
+        self.original_image = pg.image.load('./assets/gameover.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.center = (width//2, height//2)
 

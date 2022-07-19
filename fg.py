@@ -4,7 +4,7 @@ import pygame as pg
 class Fg(pg.sprite.Sprite):
     def __init__(self, pos):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load('./assets/base.png')
+        self.image = pg.image.load('./assets/base.png').convert()
         self.rect = self.image.get_rect()
         self.rect.x = pos[0]
         self.rect.y = pos[1]

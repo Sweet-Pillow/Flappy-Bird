@@ -13,10 +13,10 @@ class Bg:
     
     def get_time(self):
         if int(datetime.now().strftime("%H")) < 18:
-            self.background = pg.image.load(self.day)
+            self.background = pg.image.load(self.day).convert()
         
         else:
-            self.background = pg.image.load(self.night)
+            self.background = pg.image.load(self.night).convert()
 
     def move(self):
 

@@ -31,7 +31,7 @@ class Bird(pg.sprite.Sprite):
 
         self.bird_colors = choice(['yellow', 'blue', 'red'])
         self.bird_frame = 0
-        self.bird = pg.image.load(self.birds_images[self.bird_colors][1])
+        self.bird = pg.image.load(self.birds_images[self.bird_colors][1]).convert()
         self.rect = self.bird.get_rect()
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
@@ -64,8 +64,8 @@ class Bird(pg.sprite.Sprite):
         if now - self.bird_fly_update > 60:
             self.bird_fly_update = now
             self.bird = pg.image.load(
-                self.birds_images[self.bird_colors][self.bird_frame])
-            self.bird = pg.transform.rotate(self.bird, self.rotation)
+                self.birds_images[self.bird_colors][self.bird_frame]).convert()
+            self.bird = pg.transform.rotate(self.bird, self.rotation).convert()
 
             '''if self.jumping == False:
                 if now - self.bird_rotate_update > 3:

@@ -7,7 +7,7 @@ class PipeTop(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
 
         self.pipe_top_image = './assets/pipe-green.png'
-        self.image = pg.transform.flip(pg.image.load(self.pipe_top_image), False, True)
+        self.image = pg.transform.flip(pg.image.load(self.pipe_top_image), False, True).convert()
         self.rect = self.image.get_rect()
         self.rect.x = posX
         self.rect.y = posY 
@@ -18,7 +18,7 @@ class PipeBottom(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
 
         self.pipe_bottom_image = './assets/pipe-green.png'
-        self.image = pg.image.load(self.pipe_bottom_image)
+        self.image = pg.image.load(self.pipe_bottom_image).convert()
         self.rect = self.image.get_rect()
         self.rect.x = posX
         self.rect.y = distance # 320 is the height of the pipe image
