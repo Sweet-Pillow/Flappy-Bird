@@ -1,11 +1,11 @@
 import pygame
-import sys
 from bg import Bg
 from fg import Fg
 from bird import Bird
 from pipes import Pipes
 from gamestart import GameStart
 from gameover import GameOver
+from score import Score
 
 
 class Game:
@@ -24,6 +24,8 @@ class Game:
         # Instantiating objects
         self.game_start = GameStart(self.width, self.height)
         self.game_over = GameOver(self.width, self.height)
+
+        self.score = Score(self.width)
 
         self.bg1 = Bg([0, 0])
         self.bg2 = Bg([self.width, 0])
@@ -56,7 +58,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    exit()
 
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
@@ -92,7 +94,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    exit()
 
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
@@ -101,11 +103,14 @@ class Game:
 
             self.screen.blit(self.bird.bird, self.bird.rect)
 
+            self.screen.blit(self.score.score_surface, self.score.score_rect)
+
             self.screen.blit(self.game_over.image, self.game_over.rect)
 
             #   Animation
             self.game_over.animation()
             if not (pygame.sprite.spritecollide(self.bird, self.all_fgs_group, False)):
+                self.bird.bird_animation()
                 self.bird.gravity_force(True)
 
             else:
@@ -113,15 +118,18 @@ class Game:
 
             pygame.display.update()
 
+        self.reset()
+        self.loop()
+
+    def reset(self):
         self.pipe1.restart_pipe()
         self.pipe2.restart_pipe()
-
         self.bird.respawn()
-
-        self.loop()
+        self.score.reset()
 
     def loop(self):
         run = True
+        collide_check = True
         while run:
             self.clock.tick(60)
 
@@ -129,13 +137,15 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    exit()
 
             #   Drawing on screen
             self.screen.blit(self.bg1.background, self.bg1.pos)
             self.screen.blit(self.bg2.background, self.bg2.pos)
 
             self.all_obstacles_group.draw(self.screen)
+
+            self.screen.blit(self.score.score_surface, self.score.score_rect)
 
             self.screen.blit(self.bird.bird, self.bird.rect)
 
@@ -155,6 +165,13 @@ class Game:
             self.bird.bird_animation()
 
             #   Colission check
+            if (pygame.Rect.colliderect(self.bird.rect, self.pipe1.rect_score) or pygame.Rect.colliderect(self.bird.rect, self.pipe2.rect_score)) and collide_check:
+                self.score.score_update()
+                collide_check = False
+
+            elif not (pygame.Rect.colliderect(self.bird.rect, self.pipe1.rect_score) or pygame.Rect.colliderect(self.bird.rect, self.pipe2.rect_score)):
+                collide_check = True
+
             if pygame.sprite.spritecollide(self.bird, self.all_obstacles_group, False):
                 run = False
 
